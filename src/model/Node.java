@@ -9,7 +9,7 @@ public class Node {
     private String loc;
     private double lon;
     private double lat;
-    private boolean vis;
+    private byte vis;
     private int cid;
 
     public int getId() {
@@ -52,11 +52,11 @@ public class Node {
         this.lat = lat;
     }
 
-    public boolean isVis() {
+    public byte isVis() {
         return vis;
     }
 
-    public void setVis(boolean vis) {
+    public void setVis(byte vis) {
         this.vis = vis;
     }
 

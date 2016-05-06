@@ -111,7 +111,6 @@ public class PostDataDao {
     public void postPeerData(PersonalData personalData) {
         String update = "insert into upostdata " +
                 "(plon, plat, pcity, ptime, pm25, pm10, uid) values ("
-                //+ personalData.getId() + ", "
                 + personalData.getLat() + ", "
                 + personalData.getLon() + ", '"
                 + personalData.getCity() + "', '"
@@ -121,7 +120,6 @@ public class PostDataDao {
                 + personalData.getPm10() + ", "
                 + personalData.getUid() + ")";
         Statement statement = null;
-        ResultSet resultSet = null;
         Connection connection = new DBHelper().getConn();
         try {
             statement = connection.createStatement();
@@ -135,9 +133,6 @@ public class PostDataDao {
                 }
                 if (statement != null) {
                     statement.close();
-                }
-                if (resultSet != null) {
-                    resultSet.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
