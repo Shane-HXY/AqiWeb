@@ -14,8 +14,8 @@ public class UserDao {
     /**
      * 验证用户登录
      */
-    public String checkLogin(String username, String password) {
-        String id = null;
+    public int checkLogin(String username, String password) {
+        int id = 0;
         String query = "select * from user where " +
                 "username = '" + username + "' and password = '" + password + "'";
         Statement statement = null;
@@ -25,8 +25,9 @@ public class UserDao {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                id = resultSet.getString("uid");
+                id = resultSet.getInt("uid");
             }
+            System.out.println(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,4 +100,7 @@ public class UserDao {
         return alter(query);
     }
 
+    public static void main(String[] args) {
+        new UserDao().checkLogin("admin", "admin");
+    }
 }

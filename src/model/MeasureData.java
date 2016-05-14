@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by huangxiangyu on 16/5/5.
  */
-public class MesureData {
+public class MeasureData {
     private int id;
     private Timestamp time;
     private double pm2_5;
