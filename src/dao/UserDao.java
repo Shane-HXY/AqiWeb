@@ -1,6 +1,7 @@
 package dao;
 
 import db.DBHelper;
+import model.User;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -98,6 +99,41 @@ public class UserDao {
         String query = "update user set alarm = "
                 + alarm + " where username = '" + username + "'";
         return alter(query);
+    }
+
+    /**
+     * 查询用户名
+     */
+    public String findUsername(int id) {
+        String username = null;
+        String query = "SELECT * FROM USER WHERE uid = " + id;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        Connection connection = new DBHelper().getConn();
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+            while (resultSet.next()) {
+                username = resultSet.getString("username");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
     }
 
     public static void main(String[] args) {

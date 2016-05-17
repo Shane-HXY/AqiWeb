@@ -9,19 +9,19 @@ import java.sql.Statement;
  * Created by huangxiangyu on 16/5/4.
  */
 public class DBHelper {
-    private static String dbUrl = "jdbc:mysql://localhost:3306/pm2_5";
-    private static String dbUser = "root";
-    private static String dbPassword = "root";
-    private static String jdbcName = "com.mysql.jdbc.Driver";
 
     public static Connection getConn() {
         Connection conn = null;
         try {
+            String jdbcName = "com.mysql.jdbc.Driver";
             Class.forName(jdbcName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
+            String dbUrl = "jdbc:mysql://localhost:3306/pm2_5";
+            String dbUser = "root";
+            String dbPassword = "root";
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -19,7 +19,7 @@ public class PostDataDao {
     public List<PersonalData> getPeerDataList(String strwhere, String strorder) {
         String query = "select * from upostdata ";
         if (!(isInvalid(strwhere))) {
-            query += " where " + strwhere;
+            query += " where pcity = " + strwhere;
         }
         if (!(isInvalid(strorder))) {
             query += " order by " + strorder;

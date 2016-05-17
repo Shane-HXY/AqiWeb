@@ -306,7 +306,7 @@ public class AuthorityDao {
      */
     //节点当前数据
     public MeasureData getMesureData(int nodeId) {
-        String query = "select * from data where did = " + nodeId
+        String query = "select * from data where nid = " + nodeId
                 + " order BY UNIX_TIMESTAMP('dtime') DESC";
         Statement statement = null;
         ResultSet resultSet = null;
