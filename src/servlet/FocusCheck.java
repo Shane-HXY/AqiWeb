@@ -30,15 +30,15 @@ public class FocusCheck extends HttpServlet {
         System.out.println(request.getRemoteAddr());    //得到客户端的ip地址
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String line;
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         while ((line = bufferedReader.readLine()) != null) {
-            stringBuffer.append(line);
+            stringBuilder.append(line);
         }
         bufferedReader.close();
-        System.out.println(stringBuffer.toString());
+        System.out.println(stringBuilder.toString());
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject(stringBuffer.toString());
+            jsonObject = new JSONObject(stringBuilder.toString());
             String userId = jsonObject.getString("userId");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");

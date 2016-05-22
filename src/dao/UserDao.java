@@ -77,27 +77,27 @@ public class UserDao {
     /**
      * 用户修改邮箱
      */
-    public Boolean alterEmail(String username, String email) {
+    public Boolean alterEmail(int id, String email) {
         String query = "update user set email = '"
-                + email + "' where username = '" + username + "'";
+                + email + "' where uid = " + id;
         return alter(query);
     }
 
     /**
      * 用户修改密码
      */
-    public Boolean alterPassword(String username, String password) {
+    public Boolean alterPassword(int id, String password) {
         String query = "update user set password = '"
-                + password + "' where username = '" + username + "'";
+                + password + "' where uid = " + id;
         return alter(query);
     }
 
     /**
      * 用户修改警戒值
      */
-    public Boolean alterAlarm(String username, double alarm) {
+    public Boolean alterAlarm(int id, double alarm) {
         String query = "update user set alarm = "
-                + alarm + " where username = '" + username + "'";
+                + alarm + " where username = " + id;
         return alter(query);
     }
 
@@ -112,7 +112,7 @@ public class UserDao {
         Connection connection = new DBHelper().getConn();
         try {
             statement = connection.createStatement();
-            statement.executeUpdate(query);
+            resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 username = resultSet.getString("username");
             }
@@ -134,6 +134,45 @@ public class UserDao {
             }
         }
         return username;
+    }
+
+    /**
+     * 获得用户信息
+     */
+    public User getUserInfo(int id) {
+        String query = "SELECT * FROM USER WHERE uid = " + id;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        Connection connection = new DBHelper().getConn();
+        User user = new User();
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                user.setId(resultSet.getInt("uid"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setUemail(resultSet.getString("email"));
+                user.setAlarm(String.valueOf(resultSet.getDouble("alarm")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 
     public static void main(String[] args) {

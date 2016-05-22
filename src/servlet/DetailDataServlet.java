@@ -1,8 +1,9 @@
 package servlet;
 
-import dao.PostDataDao;
+import dao.AuthorityDao;
 import dao.UserDao;
-import model.PersonalData;
+import model.MeasureData;
+import model.Node;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,50 +14,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by huangxiangyu on 16/5/16.
+ * Created by huangxiangyu on 16/5/22.
  */
-@WebServlet("/commServlet")
-public class CommServlet extends HttpServlet {
+@WebServlet("/detailData")
+public class DetailDataServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException,IOException,JSONException {
+            throws ServletException, IOException, JSONException {
         request.setCharacterEncoding("UTF-8");
-        String userId = request.getParameter("userId");
-        String where = request.getParameter("where");
+        String nodeName = request.getParameter("nodeName");
+        String timeSpan = request.getParameter("timeSpan");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-        PostDataDao postDataDao = new PostDataDao();
-        List<PersonalData> personalDataList = postDataDao.getPeerDataList(userId, where, "ptime desc");
+        AuthorityDao authorityDao = new AuthorityDao();
+        Node node = authorityDao.getNode(nodeName);
+        List<MeasureData> measureDataList = authorityDao.getMesureDataList(timeSpan, node.getId());
         JSONObject jsonObject = new JSONObject();
-        if (personalDataList.size() == 0) {
+        if (measureDataList.size() == 0) {
             jsonObject.put("result", "false");
         } else {
+            jsonObject.put("result", "true");
             JSONArray jsonArray = new JSONArray();
-            for (PersonalData personalData :
-                 personalDataList) {
+            for (MeasureData measureData :
+                 measureDataList) {
                 JSONObject object = new JSONObject();
-                object.put("data_id", personalData.getId());
-                object.put("data_time", personalData.getTime());
-                object.put("data_city", personalData.getCity());
-                object.put("data_lat", personalData.getLat());
-                object.put("data_lon", personalData.getLon());
-                object.put("data_pm25", personalData.getPm2_5());
-                object.put("data_pm10", personalData.getPm10());
-                UserDao userDao = new UserDao();
-                String username = userDao.findUsername(personalData.getUid());
-                object.put("data_uname", username);
+                object.put("mId", measureData.getId());
+                object.put("mPm25", measureData.getPm2_5());
+                object.put("mPm10", measureData.getPm10());
+                object.put("mTime", measureData.getTime());
+                object.put("mNid", measureData.getNid());
                 jsonArray.put(object);
             }
-            jsonObject.put("result", "true");
             jsonObject.put("data", jsonArray);
         }
         System.out.println(jsonObject);
         response.getOutputStream().write(jsonObject.toString().getBytes("UTF-8"));
     }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {

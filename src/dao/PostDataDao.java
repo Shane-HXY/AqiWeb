@@ -2,12 +2,9 @@ package dao;
 
 import db.DBHelper;
 import model.PersonalData;
-import model.User;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Date;
 
 /**
  * Created by huangxiangyu on 16/5/5.
@@ -16,10 +13,16 @@ public class PostDataDao {
     /**
      * 查询[个人发布数据]概要集合
      */
-    public List<PersonalData> getPeerDataList(String strwhere, String strorder) {
-        String query = "select * from upostdata ";
+    public List<PersonalData> getPeerDataList(String userId, String strwhere, String strorder) {
+        String query = "select * from upostdata";
         if (!(isInvalid(strwhere))) {
-            query += " where pcity = " + strwhere;
+            query += " where pcity = '" + strwhere + "'";
+        }
+        if (!(isInvalid(userId)) && isInvalid(strwhere)) {
+            query += " WHERE uid = " + Integer.parseInt(userId);
+        }
+        if (!(isInvalid(userId)) && !(isInvalid(strwhere))) {
+            query += " AND uid = " + Integer.parseInt(userId);
         }
         if (!(isInvalid(strorder))) {
             query += " order by " + strorder;
