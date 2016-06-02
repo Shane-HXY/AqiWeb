@@ -346,7 +346,10 @@ public class AuthorityDao {
         String query = null;
         switch (timeSpan) {
             case "month":
-                query = "SELECT * FROM data WHERE nid = " + nodeId + " AND dtime >= date_format(date_sub(date_sub(now(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 1 WEEK), '%Y-%m-%d')";
+                query = "SELECT * FROM data WHERE nid = " + nodeId + " AND dtime >= date_format(date_sub(date_sub(now(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 4 WEEK), '%Y-%m-%d')";
+                break;
+            case "week":
+                query = "SELECT * FROM data WHERE nid = " + nodeId + " AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dtime)";
                 break;
             case "day":
                 query = "SELECT * FROM data WHERE DATEDIFF(dtime, NOW()) = 0 AND nid = " + nodeId;
@@ -400,7 +403,7 @@ public class AuthorityDao {
         } else if (table.equals("FocusCity")) {
             column = "idCity";
         }
-        String update = "INSERT INTO " + table + "(idUser, " + column + ") VALUE ("
+        String update = "INSERT INTO " + table + "(idUser, " + column + ") VALUES ("
                 + userId + ", " + id + ")";
         Statement statement = null;
         Connection connection = new DBHelper().getConn();
